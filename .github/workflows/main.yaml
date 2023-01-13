@@ -1,0 +1,35 @@
+name: build
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CI_PAT }}
+      - name: Project version
+        id: project_version
+        uses: lorislab/samo-action@v1.0.0
+        with:
+          args: samo project version
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build helm
+        run: |
+          yq -iP '.version="${{ steps.project_version.outputs.stdout }}"' Chart.yaml
+          helm package .
+          PKG_NAME=`ls *.tgz`
+          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts

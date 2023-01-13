@@ -1,0 +1,26 @@
+domain: localhost
+
+version: latest
+
+image:
+  registry: ghcr.io
+  repository: andrejpetras/todo-core
+  tag: latest
+
+replicas: 1
+
+service:
+  port: 80
+
+pod:
+  port: 8080
+
+livenessProbe:
+  url: /q/health/live
+readinessProbe:
+  url: /q/health/ready
+
+config:
+  health:
+    liveness: "true"
+    readiness: "true"

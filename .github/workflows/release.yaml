@@ -1,0 +1,30 @@
+name: release
+on:
+  push:
+    tags:
+    - '**'
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    name: build-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CI_PAT }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build helm
+        run: |
+          yq -iP '.version="${{ github.ref_name }}"' Chart.yaml
+          helm package helm
+          PKG_NAME=`ls *.tgz`
+          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
