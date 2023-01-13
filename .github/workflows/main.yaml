@@ -32,4 +32,4 @@ jobs:
           yq -iP '.version="${{ steps.project_version.outputs.stdout }}"' Chart.yaml
           helm package .
           PKG_NAME=`ls *.tgz`
-          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
+          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts --debug
