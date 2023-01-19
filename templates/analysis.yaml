@@ -1,0 +1,16 @@
+{{ if and .Values.rollout.enabled .Values.rollout.smokeTest.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
+spec:
+  args:
+  - name: service-name
+  metrics:
+  - name: smoke-test
+    successCondition: "result.ok"
+    provider:
+      web:
+        url: {{ .Values.rollout.smokeTest.url }}
+        jsonPath: "{$.data}"
+{{ end }}

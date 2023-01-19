@@ -1,6 +1,6 @@
-{{ if not .Values.rollout.enabled }}
-apiVersion: apps/v1
-kind: Deployment
+{{ if .Values.rollout.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
   labels:
@@ -53,4 +53,16 @@ spec:
               value: {{ tpl ($val|toString) $ | quote }}
           {{- end }}
           {{- end }}
+  strategy:
+    blueGreen:
+      activeService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
+      previewService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-preview
+      {{ if .Values.rollout.smokeTest.enabled }}
+      prePromotionAnalysis:
+        templates:
+        - templateName: smoke-test
+        args:
+        - name: service-name
+          value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-preview
+      {{ end }}
 {{ end }}

@@ -24,3 +24,9 @@ config:
   health:
     liveness: "true"
     readiness: "true"
+
+rollouts:
+  enabled: false
+  smokeTest: 
+    enabled: false
+    url: "http://{{args.service-name}}/rollout/smoke-test"
