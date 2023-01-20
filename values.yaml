@@ -27,6 +27,7 @@ config:
 
 rollout:
   enabled: false
+  autoPromotionEnabled: false
   smokeTest: 
     enabled: false
     url: "http://{{args.service-name}}/rollout/smoke-test"

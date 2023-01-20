@@ -57,6 +57,7 @@ spec:
     blueGreen:
       activeService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
       previewService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
+      autoPromotionEnabled: {{ .Values.rollout.autoPromotionEnabled }}
       {{ if .Values.rollout.smokeTest.enabled }}
       prePromotionAnalysis:
         templates:
