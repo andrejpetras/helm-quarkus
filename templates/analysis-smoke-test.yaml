@@ -2,12 +2,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
+  name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-smoke-test
 spec:
   args:
   - name: service-name
   metrics:
-  - name: smoke-test
+  - name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-smoke-test
     successCondition: "result.ok"
     provider:
       web:

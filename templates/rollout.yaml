@@ -61,7 +61,7 @@ spec:
       {{ if .Values.rollout.smokeTest.enabled }}
       prePromotionAnalysis:
         templates:
-        - templateName: smoke-test
+        - templateName: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-smoke-test
         args:
         - name: service-name
           value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
