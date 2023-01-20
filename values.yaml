@@ -25,7 +25,7 @@ config:
     liveness: "true"
     readiness: "true"
 
-rollouts:
+rollout:
   enabled: false
   smokeTest: 
     enabled: false
