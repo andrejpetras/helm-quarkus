@@ -64,6 +64,6 @@ spec:
         - templateName: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-smoke-test
         args:
         - name: service-name
-          value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
+          value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout.{{ .Release.Namespace }}.svc.cluster.local
       {{ end }}
 {{ end }}
