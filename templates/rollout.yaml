@@ -56,13 +56,13 @@ spec:
   strategy:
     blueGreen:
       activeService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
-      previewService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-preview
+      previewService: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
       {{ if .Values.rollout.smokeTest.enabled }}
       prePromotionAnalysis:
         templates:
         - templateName: smoke-test
         args:
         - name: service-name
-          value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-preview
+          value: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
       {{ end }}
 {{ end }}

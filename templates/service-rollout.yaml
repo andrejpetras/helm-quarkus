@@ -1,0 +1,15 @@
+{{ if .Values.rollout.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}-rollout
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
+spec:
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.name | default .Chart.Name }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.pod.port }}
+{{ end }}
